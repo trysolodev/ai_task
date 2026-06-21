@@ -1,0 +1,20 @@
+# Web framework
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+
+# Postgres + pgvector
+psycopg[binary,pool]==3.2.3
+pgvector==0.3.6
+
+# Numerics for the local embedder
+numpy==2.2.1
+
+# LLM extraction (optional at runtime — falls back to rules without a key)
+anthropic==0.69.0
+
+# HTTP client used by tests and optional embedding providers
+httpx==0.28.1
+
+# Tests
+pytest==8.3.4

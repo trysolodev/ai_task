@@ -1,0 +1,71 @@
+{
+  "description": "Probe queries against /recall. `expect` substrings must appear in the returned context (case-insensitive); `unexpected` must NOT. `empty` asserts an empty context (cold/noise).",
+  "probes": [
+    {
+      "name": "current_job_after_change",
+      "query": "Where does the user work these days?",
+      "user_id": "alice", "session_id": "probe",
+      "expect": ["Notion"], "unexpected": []
+    },
+    {
+      "name": "job_history_preserved",
+      "query": "What is the user's employment history?",
+      "user_id": "alice", "session_id": "probe",
+      "expect": ["Notion", "Stripe"], "unexpected": []
+    },
+    {
+      "name": "current_city_after_move",
+      "query": "What city does the user live in now?",
+      "user_id": "alice", "session_id": "probe",
+      "expect": ["Berlin"], "unexpected": []
+    },
+    {
+      "name": "multi_hop_known_user",
+      "query": "What city does the user with the dog named Biscuit live in?",
+      "user_id": "alice", "session_id": "probe",
+      "expect": ["Berlin"], "unexpected": []
+    },
+    {
+      "name": "multi_hop_entity_resolution",
+      "query": "What city does the person who has a dog named Biscuit live in?",
+      "user_id": null, "session_id": "probe",
+      "expect": ["Berlin"], "unexpected": []
+    },
+    {
+      "name": "implicit_pet_name",
+      "query": "What is the user's pet called?",
+      "user_id": "alice", "session_id": "probe",
+      "expect": ["Biscuit"], "unexpected": []
+    },
+    {
+      "name": "dietary_needs",
+      "query": "What are the user's dietary restrictions?",
+      "user_id": "alice", "session_id": "probe",
+      "expect": ["vegetarian", "shellfish"], "unexpected": []
+    },
+    {
+      "name": "communication_preference",
+      "query": "How does the user prefer their answers?",
+      "user_id": "alice", "session_id": "probe",
+      "expect": ["concise"], "unexpected": []
+    },
+    {
+      "name": "cross_user_isolation",
+      "query": "Where does the user work?",
+      "user_id": "bob", "session_id": "probe",
+      "expect": ["Google"], "unexpected": ["Notion", "Stripe", "Biscuit"]
+    },
+    {
+      "name": "noise_resistance_offtopic",
+      "query": "What is the user's favorite movie?",
+      "user_id": "alice", "session_id": "probe",
+      "expect": [], "unexpected": ["movie", "favorite film"]
+    },
+    {
+      "name": "cold_unknown_user",
+      "query": "Tell me about the user's hobbies.",
+      "user_id": "ghost", "session_id": "probe",
+      "expect": [], "unexpected": [], "empty": true
+    }
+  ]
+}

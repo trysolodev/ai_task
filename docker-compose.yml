@@ -1,0 +1,51 @@
+# Boots the memory service + its single backing store (Postgres w/ pgvector).
+#
+#   docker compose up -d
+#   until curl -sf http://localhost:8080/health; do sleep 1; done
+#
+# Data survives `docker compose down && docker compose up` via the named
+# volume `memory_pgdata`. `docker compose down -v` wipes it.
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: memory
+      POSTGRES_PASSWORD: memory
+      POSTGRES_DB: memory
+    volumes:
+      - memory_pgdata:/var/lib/postgresql/data
+    # Healthcheck gates the app's startup so migrations never race the DB.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U memory -d memory"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Connection to the backing store.
+      DATABASE_URL: postgresql://memory:memory@db:5432/memory
+      # Optional bearer token. If unset, auth is disabled (per the contract).
+      MEMORY_AUTH_TOKEN: ${MEMORY_AUTH_TOKEN:-}
+      # Extraction LLM. Falls back to rule-based extraction if no key is set.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_BASE_URL: ${ANTHROPIC_BASE_URL:-}
+      EXTRACTION_MODEL: ${EXTRACTION_MODEL:-claude-opus-4-8}
+      EXTRACTION_BACKEND: ${EXTRACTION_BACKEND:-auto}
+      # Embeddings: local (default, no network) | openai | voyage.
+      EMBED_PROVIDER: ${EMBED_PROVIDER:-local}
+      EMBED_DIM: ${EMBED_DIM:-384}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  memory_pgdata:

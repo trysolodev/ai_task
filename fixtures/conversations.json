@@ -1,0 +1,77 @@
+{
+  "description": "Self-eval conversations. Test ids are namespaced at runtime so this never collides with real data. Two users (alice, bob) across multiple sessions exercise fact evolution, implicit facts, and cross-user isolation.",
+  "turns": [
+    {
+      "session_id": "s1",
+      "user_id": "alice",
+      "timestamp": "2025-03-01T10:00:00Z",
+      "messages": [
+        {"role": "user", "content": "Hi, I'm Alice. I work at Stripe as a backend engineer."},
+        {"role": "assistant", "content": "Nice to meet you, Alice! How's life at Stripe?"}
+      ]
+    },
+    {
+      "session_id": "s1",
+      "user_id": "alice",
+      "timestamp": "2025-03-01T10:02:00Z",
+      "messages": [
+        {"role": "user", "content": "I live in San Francisco. I have a dog named Biscuit."},
+        {"role": "assistant", "content": "Biscuit is a great name for a dog!"}
+      ]
+    },
+    {
+      "session_id": "s1",
+      "user_id": "alice",
+      "timestamp": "2025-03-01T10:05:00Z",
+      "messages": [
+        {"role": "user", "content": "By the way, I'm vegetarian and I'm allergic to shellfish."},
+        {"role": "assistant", "content": "Got it, I'll keep your dietary needs in mind."}
+      ]
+    },
+    {
+      "session_id": "s2",
+      "user_id": "alice",
+      "timestamp": "2025-03-10T09:00:00Z",
+      "messages": [
+        {"role": "user", "content": "I prefer concise, direct answers."},
+        {"role": "assistant", "content": "Understood, I'll be brief."}
+      ]
+    },
+    {
+      "session_id": "s2",
+      "user_id": "alice",
+      "timestamp": "2025-03-10T09:10:00Z",
+      "messages": [
+        {"role": "user", "content": "I spent today debugging a React performance issue with too many re-renders in our analytics dashboard."},
+        {"role": "assistant", "content": "Excessive re-renders are a common React pitfall."}
+      ]
+    },
+    {
+      "session_id": "s3",
+      "user_id": "alice",
+      "timestamp": "2025-03-15T14:00:00Z",
+      "messages": [
+        {"role": "user", "content": "Quick update: I just started at Notion as a product manager."},
+        {"role": "assistant", "content": "Congratulations on the new role at Notion!"}
+      ]
+    },
+    {
+      "session_id": "s3",
+      "user_id": "alice",
+      "timestamp": "2025-03-15T14:05:00Z",
+      "messages": [
+        {"role": "user", "content": "Also, I moved to Berlin from San Francisco last month."},
+        {"role": "assistant", "content": "Berlin is a wonderful city to live in."}
+      ]
+    },
+    {
+      "session_id": "sb1",
+      "user_id": "bob",
+      "timestamp": "2025-03-05T11:00:00Z",
+      "messages": [
+        {"role": "user", "content": "Hey, I'm Bob. I work at Google and I love TypeScript."},
+        {"role": "assistant", "content": "Hi Bob, nice to meet you!"}
+      ]
+    }
+  ]
+}
