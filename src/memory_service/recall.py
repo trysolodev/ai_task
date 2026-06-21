@@ -140,6 +140,11 @@ class RecallEngine:
         if not user_id and query:
             user_id = self._resolve_user(query, session_id) or user_id
 
+        # Without any scope there is nothing to attribute memories to — never
+        # fall through to a global (cross-user) read.
+        if not user_id and not session_id:
+            return {"context": "", "citations": []}
+
         facts = self._active_by_type(user_id, session_id, ("fact",))
         prefs = self._active_by_type(user_id, session_id, ("preference",))
         if not facts and not prefs and not query:

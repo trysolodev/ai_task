@@ -82,6 +82,20 @@ def test_cold_session_returns_empty_not_error(client, run_id):
     assert r.json() == {"context": "", "citations": []}
 
 
+def test_recall_without_any_scope_never_leaks(client, run_id):
+    # Seed a user, then recall with both user_id and session_id null + a query
+    # that matches no entity: must not return a global cross-user read.
+    user = f"{run_id}_scope"
+    try:
+        client.post("/turns", json=_turn(f"{run_id}_scope_s", user, "I work at SecretCorp."))
+        r = client.post("/recall", json={"query": "tell me about employment",
+                                         "user_id": None, "session_id": None, "max_tokens": 400})
+        assert r.status_code == 200
+        assert "secretcorp" not in r.json()["context"].lower()
+    finally:
+        client.delete(f"/users/{user}")
+
+
 def test_concurrent_sessions_do_not_bleed(client, run_id):
     u1, u2 = f"{run_id}_a", f"{run_id}_b"
     try:
